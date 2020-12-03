@@ -9,30 +9,30 @@ namespace DetyraAES
     public class AES  // Advanced Encryption Standard-AES
     {
         //Me klasen enum krijojme nje grupim  te konstanteve per madhesite e mundshme te celesit ne bits. Per 128, 193 dhe 256 bits.
-        public enum KeySize { Bits128, Bits192, Bits256 };  // key size, in bits, for construtor
+        public enum KeySize { Bits128, Bits192, Bits256 };  
 
         //Nb paraqet madhesine e bllokut ne fjalet 32 bitshe. Ne AES eshte 4 madhesia e bllokut(matrica e rendit 4X4) prandaj 4 * 32= 128 bits
-        private int Nb;         // block size in 32-bit words.  Always 4 for AES.  (128 bits).
+        private int Nb;        
         //Nk paraqet madhesine e celesit ne fjalet 32 bitshe. 4, 6, 8 jane vlerat e mundshme. (128, 192 dhe 256 bits)
-        private int Nk;         // key size in 32-bit words.  4, 6, 8.  (128, 192, 256 bits).
+        private int Nk;         
        // Numri i cikleve (number of rounds).
        //10 cikle -> per celes 128 bitsh
        //12 cikle -> per celes 192 bitsh
        //14 cikle -> per celes 256 bitsh
-        private int Nr;         // number of rounds. 10, 12, 14.
+        private int Nr;        
 
         //krijojme nje byte array per celes berthame. Madhesia do te jete 4 * madhesia e celesit
         private byte[] key;     // the seed key. size will be 4 * keySize from ctor.
         //krijojme vargun dydimensional per Sbox(substitutio box), bllokun e zevendesimit
-        private byte[,] Sbox;   // Substitution box
+        private byte[,] Sbox;   
         //krijojme vargun dydimensional per SBox-in invers
-        private byte[,] iSbox;  // inverse Substitution box
+        private byte[,] iSbox;  
         //krijojme vargun dydimensional per key schedule
-        private byte[,] w;      // key schedule array
+        private byte[,] w;     
         //krijojme vargun dydimensional per konstantet e roundeve (cikleve)  
-        private byte[,] Rcon;   // Round constants
+        private byte[,] Rcon;   
         //krijojem vargu dydimensional qe paraqet matricen e gjendjes
-        private byte[,] State;  // State matrix
+        private byte[,] State; 
 
 
         //Konstruktori i klases AES  per inicializim te vlerave
@@ -50,11 +50,12 @@ namespace DetyraAES
             BuildSbox();
             //thirret funskioni invers i SBox-it
             BuildInvSbox();
-            //thirret funksioni BuildRcon()
+            //thirret funksioni BuildRcon() per te krijuar konstantet e cikeleve te perseritjes
             BuildRcon();
-            KeyExpansion();  // expand the seed key into a key schedule
+            //thirret funksioni KeyExpansion per zgjerim te celsit ne nje key schedule
+            KeyExpansion();  
 
-        }  // Aes constructor
+        }  
 
         public void Cipher(byte[] input, byte[] output)  // encipher 16-bit input
         {
