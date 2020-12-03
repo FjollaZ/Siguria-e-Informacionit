@@ -48,7 +48,9 @@ namespace AesLib
 
             //thirret funksioni BuildSbox()
             BuildSbox();
+            //thirret funskioni invers i SBox-it
             BuildInvSbox();
+            //thirret funksioni BuildRcon()
             BuildRcon();
             KeyExpansion();  // expand the seed key into a key schedule
 
