@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AesLib
+namespace DetyraAES
 {
-    public class Aes  // Advanced Encryption Standard-AES
+    public class AES  // Advanced Encryption Standard-AES
     {
         //Me klasen enum krijojme nje grupim  te konstanteve per madhesite e mundshme te celesit ne bits. Per 128, 193 dhe 256 bits.
         public enum KeySize { Bits128, Bits192, Bits256 };  // key size, in bits, for construtor
@@ -36,7 +36,7 @@ namespace AesLib
 
 
         //Konstruktori i klases AES  per inicializim te vlerave
-        public Aes(KeySize keySize, byte[] keyBytes)
+        public AES(KeySize keySize, byte[] keyBytes)
         {
             //thirret funksioni setNBNkNr me parameter versisht aq sa eshte madhesia e celesit128,192 apo 256 bits
             SetNbNkNr(keySize);
