@@ -8,10 +8,10 @@ namespace AesLib
 {
     public class Aes  // Advanced Encryption Standard-AES
     {
-        //Me klasen enum krijojme nje grup te konstanteve per madhesite e mundshme te celesit ne bits. Per 128, 193 dhe 256 bits.
+        //Me klasen enum krijojme nje grupim  te konstanteve per madhesite e mundshme te celesit ne bits. Per 128, 193 dhe 256 bits.
         public enum KeySize { Bits128, Bits192, Bits256 };  // key size, in bits, for construtor
 
-        //Nb paraqet madhesine e bllokut ne fjalet 32 bitshe. Ne AES eshte 4 madhesia e bllokut prandaj 4 * 32= 128 bits
+        //Nb paraqet madhesine e bllokut ne fjalet 32 bitshe. Ne AES eshte 4 madhesia e bllokut(matrica e rendit 4X4) prandaj 4 * 32= 128 bits
         private int Nb;         // block size in 32-bit words.  Always 4 for AES.  (128 bits).
         //Nk paraqet madhesine e celesit ne fjalet 32 bitshe. 4, 6, 8 jane vlerat e mundshme. (128, 192 dhe 256 bits)
         private int Nk;         // key size in 32-bit words.  4, 6, 8.  (128, 192, 256 bits).
