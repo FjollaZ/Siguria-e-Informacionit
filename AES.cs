@@ -169,6 +169,7 @@ namespace DetyraAES
 
         private void BuildInvSbox()
         {
+            //casemi ne vargun dydimensional te deklaruar si iSbox (inverse Substitution Box) dhe ja caktojme rendin 16X16, per te mbushur me te dhena heksadecimale
             this.iSbox = new byte[16, 16] {  // populate the iSbox matrix
     /* 0     1     2     3     4     5     6     7     8     9     a     b     c     d     e     f */
     /*0*/  {0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb},
@@ -189,9 +190,13 @@ namespace DetyraAES
     /*f*/  {0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d} };
 
         }  // BuildInvSbox()
-
+    //Funksioni per krijimin e konstanteve per rounds
         private void BuildRcon()
         {
+            //casemi ne vargun dydimensional Rcon per konstantet e round-eve dhe krijojme nje byte array te rendit 11 rreshta 4 kolona
+            //pasi qe per 128 bits Nk(key size)=4 dhe Nr(number of rounds)=10 krijojme rendin 11(0-10)rreshta dhe 4 kolona 
+            //Vlerat ne kolonen e pare mbushen me vlere heksadecimale qe me konvertimne decimal i bie vlere e dyfishuar e vleres paraprake deri ne 128(per 128 bits).
+            //1(0X01), 2(0X02), 4(0X04), 8(0X08), 16(0X10), 32(0X20), 64(0X40), 128(0X80), e me pas fillon vlera nga 27(0X1b), 54(0X36).
             this.Rcon = new byte[11, 4] { {0x00, 0x00, 0x00, 0x00},
                                    {0x01, 0x00, 0x00, 0x00},
                                    {0x02, 0x00, 0x00, 0x00},
