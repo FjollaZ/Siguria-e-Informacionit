@@ -375,13 +375,18 @@ namespace DetyraAES
                            (int)gfmultby02(gfmultby02(b)) ^
                            (int)gfmultby02(b));
         }
-
+      //Funksioni per zgjerimin e celesit baze ne key schedule 
         private void KeyExpansion()
         {
+            //casemi ne vargun dydimensional w qe e kemi deklaruar per key schedule, krijohet nje byte array me rendin ne vartesi nga block size (Nb) dhe number od rounds(Nr)
+            //Nb eshte gjithmone 4 per cfaredo madhesie celesi, Nr mund te kete vlerat (10, 12 ose 14) varesisht celesit 128, 192 ose 256 bits, nderkaq redni i kolonave eshte 4
+            //duke u perputhur me numrinne bajtave te nje fjale
             this.w = new byte[Nb * (Nr + 1), 4];  // 4 columns of bytes corresponds to a word
-
+             
+            //me nje for loop variabla row merr vlerat 0-3
             for (int row = 0; row < Nk; ++row)
             {
+                //vargut per key schedule i jepet vlere duke u casur ne vargunne celesit baze "key". Madhesia do te jete 4 * key size
                 this.w[row, 0] = this.key[4 * row];
                 this.w[row, 1] = this.key[4 * row + 1];
                 this.w[row, 2] = this.key[4 * row + 2];
