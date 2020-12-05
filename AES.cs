@@ -56,25 +56,29 @@ namespace DetyraAES
             KeyExpansion();  
 
         }  
-
-        public void Cipher(byte[] input, byte[] output)  // encipher 16-bit input
+       //Funksioni cipher per enkriptim, merr si parametra inputin dhe outputin
+        //enkripton input 16 bitsh 
+        public void Cipher(byte[] input, byte[] output)  
         {
-            this.State = new byte[4, Nb];  // always [4,4]
+            //matrica e gjendjes cdo here do t kete rendin 4X4, Nb=4 cdohere
+            this.State = new byte[4, Nb];  
             for (int i = 0; i < (4 * Nb); ++i)
             {
                 this.State[i % 4, i / 4] = input[i];
             }
-
+           //Per pjesen e pare te celesit K1 aplikohet vetem funksioni AddRoundKey
             AddRoundKey(0);
-
-            for (int round = 1; round <= (Nr - 1); ++round)  // main round loop
+            //Loop-a kryesore e round-it
+            
+            for (int round = 1; round <= (Nr - 1); ++round)  
             {
+                //Keto funksione aplikohen per celesat K2 ....Kn-1
                 SubBytes();
                 ShiftRows();
                 MixColumns();
                 AddRoundKey(round);
-            }  // main round loop
-
+            }  
+            //Keto funksione thirren per celesine e fundit Kn
             SubBytes();
             ShiftRows();
             AddRoundKey(Nr);
@@ -85,9 +89,12 @@ namespace DetyraAES
             }
 
         }  // Cipher()
-
-        public void InvCipher(byte[] input, byte[] output)  // decipher 16-bit input
+        
+       //Funksioni InvCipher per dekriptim, merr si parametra inputin dhe outputin
+   
+        public void InvCipher(byte[] input, byte[] output)  
         {
+            //matrica e gjendjes cdo here do t kete rendin 4X4, Nb=4 cdohere
             this.State = new byte[4, Nb];  // always [4,4]
             for (int i = 0; i < (4 * Nb); ++i)
             {
@@ -95,14 +102,14 @@ namespace DetyraAES
             }
 
             AddRoundKey(Nr);
-
-            for (int round = Nr - 1; round >= 1; --round)  // main round loop
+           //Loop-a kryesore e round-it per InvCipher
+            for (int round = Nr - 1; round >= 1; --round)  
             {
                 InvShiftRows();
                 InvSubBytes();
                 AddRoundKey(round);
                 InvMixColumns();
-            }  // end main round loop for InvCipher
+            }  
 
             InvShiftRows();
             InvSubBytes();
@@ -113,7 +120,7 @@ namespace DetyraAES
                 output[i] = this.State[i % 4, i / 4];
             }
 
-        }  // InvCipher()
+        }  
 
         //funksioni per vendosjen e vlerave te blok size-it, key size-it dhe numrit te roundeve varesisht prej madhesise se celesit(128, 192 apo 256)
         private void SetNbNkNr(KeySize keySize)
@@ -146,7 +153,7 @@ namespace DetyraAES
         private void BuildSbox()
         {
             //casemi ne vargun dydimensional te deklaruar Sbox dhe ja caktojme rendin 16X16, per te mbushur me te dhena heksadecimale
-            this.Sbox = new byte[16, 16] {  // populate the Sbox matrix
+            this.Sbox = new byte[16, 16] {  
     /* 0     1     2     3     4     5     6     7     8     9     a     b     c     d     e     f */
     /*0*/  {0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76},
     /*1*/  {0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0},
@@ -165,7 +172,7 @@ namespace DetyraAES
     /*e*/  {0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf},
     /*f*/  {0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16} };
 
-        }  // BuildSbox()
+        }  
 
         private void BuildInvSbox()
         {
@@ -189,7 +196,7 @@ namespace DetyraAES
     /*e*/  {0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61},
     /*f*/  {0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d} };
 
-        }  // BuildInvSbox()
+        }  
     //Funksioni per krijimin e konstanteve per rounds
         private void BuildRcon()
         {
@@ -208,7 +215,7 @@ namespace DetyraAES
                                    {0x80, 0x00, 0x00, 0x00},
                                    {0x1b, 0x00, 0x00, 0x00},
                                    {0x36, 0x00, 0x00, 0x00} };
-        }  // BuildRcon()
+        }  
 
         private void AddRoundKey(int round)
         {
@@ -437,9 +444,10 @@ namespace DetyraAES
             result[3] = this.Sbox[word[3] >> 4, word[3] & 0x0f];
             return result;
         }
-
+       //funksioni per rrotullim te word-it
         private byte[] RotWord(byte[] word)
         {
+            //ne rezultat vendosen vlerat e fjales te zhvendosura per nje pozicion
             byte[] result = new byte[4];
             result[0] = word[1];
             result[1] = word[2];
