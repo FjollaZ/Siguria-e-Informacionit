@@ -216,7 +216,8 @@ namespace DetyraAES
                                    {0x1b, 0x00, 0x00, 0x00},
                                    {0x36, 0x00, 0x00, 0x00} };
         }  
-
+      //Funksioni AddRound key - perzien nje vlere nga matrica e celesite me nje vlere nga matrica e mesazhit me funksionin xor. 
+        // r -rreshti, c - kolona
         private void AddRoundKey(int round)
         {
 
