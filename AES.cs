@@ -392,39 +392,45 @@ namespace DetyraAES
                 this.w[row, 2] = this.key[4 * row + 2];
                 this.w[row, 3] = this.key[4 * row + 3];
             }
-
+            //krijohet nje byte array me vlera te perkohshme e rendit 4
             byte[] temp = new byte[4];
-
+            //vlera e row do te jete 4,6 ose 8 dhe vendoset ne nje for loop deri sa arrihet vlera 4*(Nr+1)
             for (int row = Nk; row < Nb * (Nr + 1); ++row)
             {
+                //mbushet me te dhena temp array duke u bazuar ne array-n e key schedule
                 temp[0] = this.w[row - 1, 0]; temp[1] = this.w[row - 1, 1];
                 temp[2] = this.w[row - 1, 2]; temp[3] = this.w[row - 1, 3];
-
+                //nese numri i rreshtit modulo number of key eshte zero
                 if (row % Nk == 0)
                 {
+                    //vlera nga temp behet rotate dhe zevendesohet me funksionet e krijuara 
                     temp = SubWord(RotWord(temp));
-
+                    //numri i celesit te krijuar krijon cikle te ndryshme
                     temp[0] = (byte)((int)temp[0] ^ (int)this.Rcon[row / Nk, 0]);
                     temp[1] = (byte)((int)temp[1] ^ (int)this.Rcon[row / Nk, 1]);
                     temp[2] = (byte)((int)temp[2] ^ (int)this.Rcon[row / Nk, 2]);
                     temp[3] = (byte)((int)temp[3] ^ (int)this.Rcon[row / Nk, 3]);
                 }
+                //nese number of key eshte me i madhe se 6 dmth 8, ne temp aplikohet vetem funksioni per zevendesim
                 else if (Nk > 6 && (row % Nk == 4))
                 {
                     temp = SubWord(temp);
                 }
-
+                // rreshtit specifik nga key schedule per secilen kolone i jepet vlera e krijuar me xor te rreshtit ne key schedule bashke me vleren e rreshtit specifik ne temp
                 this.w[row, 0] = (byte)((int)this.w[row - Nk, 0] ^ (int)temp[0]);
                 this.w[row, 1] = (byte)((int)this.w[row - Nk, 1] ^ (int)temp[1]);
                 this.w[row, 2] = (byte)((int)this.w[row - Nk, 2] ^ (int)temp[2]);
                 this.w[row, 3] = (byte)((int)this.w[row - Nk, 3] ^ (int)temp[3]);
 
-            }  // for loop
-        }  // KeyExpansion()
-
+            }  
+        }  
+        //funksioni per zevendesimin e word
         private byte[] SubWord(byte[] word)
-        {
+        {  
+            //krijohet nje byte array i rendit 4 per te ruajtur rezultatin
             byte[] result = new byte[4];
+            //per secilin rezultat vendoset vlera zevendesuese e marrur nga Sbox, pozicioni i  gjeneruar duke aplikuar right shift ne indeksin e njete te fjales per rresht, 
+            //si dhe and operatori me vlere heksadecimale per kolone 
             result[0] = this.Sbox[word[0] >> 4, word[0] & 0x0f];
             result[1] = this.Sbox[word[1] >> 4, word[1] & 0x0f];
             result[2] = this.Sbox[word[2] >> 4, word[2] & 0x0f];
