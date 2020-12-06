@@ -219,6 +219,7 @@ namespace DetyraAES
         }  
       //Funksioni AddRound key - perzien nje vlere nga matrica e celesite me nje vlere nga matrica e mesazhit me funksionin xor. 
         // r -rreshti, c - kolona
+        //funskioni xor zbatohet ne mes te mesazhit dhe celesit per te krijuar cyphertext
         private void AddRoundKey(int round)
         {
 
@@ -231,6 +232,8 @@ namespace DetyraAES
             }
         }  // AddRoundKey()
 
+        //Funksioni SubBytes - gjene zevendesimin per mesazh nga Substitution Box (SBox) me kombinime dhe hapa specifik. 
+        //AES merr rreshtin r dhe kolonen c nga mesazhi dhe zbaton funksionin e zevendesimit per secilin rresht dhe kolone te matrices se mesazhit e keshtu krijohet matrica e cypher-it
         private void SubBytes()
         {
             for (int r = 0; r < 4; ++r)
