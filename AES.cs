@@ -100,17 +100,18 @@ namespace DetyraAES
             {
                 this.State[i % 4, i / 4] = input[i];
             }
-
+        //Per pjesen e pare te celesit K1 aplikohet vetem funksioni AddRoundKey, por ne kete rast merr si parameter numrin e rounds
             AddRoundKey(Nr);
            //Loop-a kryesore e round-it per InvCipher
             for (int round = Nr - 1; round >= 1; --round)  
-            {
+            {  
+                //Keto funksione aplikohen per celesat K2 ....Kn-1
                 InvShiftRows();
                 InvSubBytes();
                 AddRoundKey(round);
                 InvMixColumns();
             }  
-
+           //Keto funksione thirren per celesine e fundit Kn
             InvShiftRows();
             InvSubBytes();
             AddRoundKey(0);
