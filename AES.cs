@@ -255,57 +255,70 @@ namespace DetyraAES
                 }
             }
         }  // InvSubBytes
-
+        //Funksioni Shift Rows - merr matricen e mesazhit dhe nuk e ndryshon rreshtin e pare te kesaj matrice. Per rreshtine e dytte zhvendos nje kuti 
+        //zhvendoset p.sh nga pozita 10  ne 13. Ne rreshtin e trete zhvendosen  per dy dhe ne rreshtin e katert per tri. 
         private void ShiftRows()
         {
             byte[,] temp = new byte[4, 4];
-            for (int r = 0; r < 4; ++r)  // copy State into temp[]
+            //kopjon state-in (mesazhin) ne temp
+            for (int r = 0; r < 4; ++r) 
             {
                 for (int c = 0; c < 4; ++c)
                 {
                     temp[r, c] = this.State[r, c];
                 }
             }
-
-            for (int r = 1; r < 4; ++r)  // shift temp into State
+           //shift temp ne state, fillon prej rreeshtit te dyte (r=1)
+            for (int r = 1; r < 4; ++r)  
             {
                 for (int c = 0; c < 4; ++c)
                 {
                     this.State[r, c] = temp[r, (c + r) % Nb];
                 }
             }
-        }  // ShiftRows()
+        }  
 
         private void InvShiftRows()
         {
             byte[,] temp = new byte[4, 4];
-            for (int r = 0; r < 4; ++r)  // copy State into temp[]
+            for (int r = 0; r < 4; ++r)  
             {
                 for (int c = 0; c < 4; ++c)
                 {
                     temp[r, c] = this.State[r, c];
                 }
             }
-            for (int r = 1; r < 4; ++r)  // shift temp into State
+            for (int r = 1; r < 4; ++r)  
             {
                 for (int c = 0; c < 4; ++c)
                 {
                     this.State[r, (c + r) % Nb] = temp[r, c];
                 }
             }
-        }  // InvShiftRows()
-
+        }  
+        
+        //Funksioni Mix Column - Ne kete funksion eshte nje matrice fikse e cila d te ndikoje ne matricen e mesazhit(state). 
+        //Rreshti i pare - nuk ndryshon
+        //Rreshti i dyte - Shift to left
+        //Rreshti i trete - Shift to left + XOR
         private void MixColumns()
         {
+            //kopjohet state ne temp
             byte[,] temp = new byte[4, 4];
-            for (int r = 0; r < 4; ++r)  // copy State into temp[]
+            for (int r = 0; r < 4; ++r)  
             {
                 for (int c = 0; c < 4; ++c)
                 {
                     temp[r, c] = this.State[r, c];
                 }
             }
-
+           //Kater vlerat e nje kolone behen modulo multiplied ne Rijndael's Galois Field nga nje matrice e dhene .
+            /*
+              0e  0b 0d  09
+              09  0e  0b  0d
+              0c  09  0e  0b
+              0b  0d  09  0e
+            */
             for (int c = 0; c < 4; ++c)
             {
                 this.State[0, c] = (byte)((int)gfmultby02(temp[0, c]) ^ (int)gfmultby03(temp[1, c]) ^
@@ -317,12 +330,13 @@ namespace DetyraAES
                 this.State[3, c] = (byte)((int)gfmultby03(temp[0, c]) ^ (int)gfmultby01(temp[1, c]) ^
                                            (int)gfmultby01(temp[2, c]) ^ (int)gfmultby02(temp[3, c]));
             }
-        }  // MixColumns
+        }  
 
         private void InvMixColumns()
         {
             byte[,] temp = new byte[4, 4];
-            for (int r = 0; r < 4; ++r)  // copy State into temp[]
+            //kopjon state-in ne temp
+            for (int r = 0; r < 4; ++r)  
             {
                 for (int c = 0; c < 4; ++c)
                 {
