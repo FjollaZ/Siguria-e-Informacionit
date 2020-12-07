@@ -57,7 +57,7 @@ namespace DetyraAES
 
         }  
        //Funksioni cipher per enkriptim, merr si parametra inputin dhe outputin
-        //enkripton input 16 bitsh 
+        
         public void Cipher(byte[] input, byte[] output)  
         {
             //matrica e gjendjes cdo here do te kete rendin 4X4, sepse  Nb=4 
