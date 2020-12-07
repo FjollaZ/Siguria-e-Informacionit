@@ -8,12 +8,12 @@ namespace DetyraAES
 {
     public class AES  // Advanced Encryption Standard-AES
     {
-        //Me klasen enum krijojme nje grupim  te konstanteve per madhesite e mundshme te celesit ne bits. Per 128, 193 dhe 256 bits.
+        //Krijojme nje grupim  te konstanteve per madhesite e mundshme te celesit. Per 128, 193 dhe 256 bits.
         public enum KeySize { Bits128, Bits192, Bits256 };  
 
-        //Nb paraqet madhesine e bllokut ne fjalet 32 bitshe. Ne AES eshte 4 madhesia e bllokut(matrica e rendit 4X4) prandaj 4 * 32= 128 bits
+        //Nb paraqet madhesine e bllokut per word 32 bitshe. Ne AES eshte 4 madhesia e bllokut(matrica e rendit 4X4) prandaj 4 * 32= 128 bits
         private int Nb;        
-        //Nk paraqet madhesine e celesit ne fjalet 32 bitshe. 4, 6, 8 jane vlerat e mundshme. (128, 192 dhe 256 bits)
+        //Nk paraqet madhesine e celesit per word 32 bitshe. 4, 6, 8 jane vlerat e mundshme. (128, 192 dhe 256 bits)
         private int Nk;         
        // Numri i cikleve (number of rounds).
        //10 cikle -> per celes 128 bitsh
@@ -22,8 +22,8 @@ namespace DetyraAES
         private int Nr;        
 
         //krijojme nje byte array per celes berthame. Madhesia do te jete 4 * madhesia e celesit
-        private byte[] key;     // the seed key. size will be 4 * keySize from ctor.
-        //krijojme vargun dydimensional per Sbox(substitutio box), bllokun e zevendesimit
+        private byte[] key;     
+        //krijojme vargun dydimensional per Sbox(substitution box), bllokun e zevendesimit
         private byte[,] Sbox;   
         //krijojme vargun dydimensional per SBox-in invers
         private byte[,] iSbox;  
@@ -38,10 +38,10 @@ namespace DetyraAES
         //Konstruktori i klases AES  per inicializim te vlerave
         public AES(KeySize keySize, byte[] keyBytes)
         {
-            //thirret funksioni setNBNkNr me parameter versisht aq sa eshte madhesia e celesit128,192 apo 256 bits
+            //thirret funksioni setNBNkNr me parameter varesisht aq sa eshte madhesia e celesit 128,192 apo 256 bits.
             SetNbNkNr(keySize);
 
-            //casemi tek array i key, qe paraqet celesin berthame dhe per cfaredo key size (Nk) behet *4
+            //casemi tek array i key, qe paraqet celesin berthame dhe per cfaredo key size (Nk) behet *4 (4*4), (4*6), (4*8)
             this.key = new byte[this.Nk * 4];  // 16, 24, 32 bytes
             //Kopjon vlerat keybytes ne array-njedimensionale te quatur key, e vendos prej indeksit 0
             keyBytes.CopyTo(this.key, 0);
@@ -60,7 +60,7 @@ namespace DetyraAES
         //enkripton input 16 bitsh 
         public void Cipher(byte[] input, byte[] output)  
         {
-            //matrica e gjendjes cdo here do t kete rendin 4X4, Nb=4 cdohere
+            //matrica e gjendjes cdo here do te kete rendin 4X4, sepse  Nb=4 
             this.State = new byte[4, Nb];  
             for (int i = 0; i < (4 * Nb); ++i)
             {
@@ -94,7 +94,7 @@ namespace DetyraAES
    
         public void InvCipher(byte[] input, byte[] output)  
         {
-            //matrica e gjendjes cdo here do t kete rendin 4X4, Nb=4 cdohere
+            //matrica e gjendjes cdo here do t kete rendin 4X4, Nb=4
             this.State = new byte[4, Nb];  // always [4,4]
             for (int i = 0; i < (4 * Nb); ++i)
             {
@@ -178,7 +178,7 @@ namespace DetyraAES
         private void BuildInvSbox()
         {
             //casemi ne vargun dydimensional te deklaruar si iSbox (inverse Substitution Box) dhe ja caktojme rendin 16X16, per te mbushur me te dhena heksadecimale
-            this.iSbox = new byte[16, 16] {  // populate the iSbox matrix
+            this.iSbox = new byte[16, 16] {  
     /* 0     1     2     3     4     5     6     7     8     9     a     b     c     d     e     f */
     /*0*/  {0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb},
     /*1*/  {0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb},
@@ -233,7 +233,7 @@ namespace DetyraAES
         }  // AddRoundKey()
 
         //Funksioni SubBytes - gjene zevendesimin per mesazh nga Substitution Box (SBox) me kombinime dhe hapa specifik. 
-        //AES merr rreshtin r dhe kolonen c nga mesazhi dhe zbaton funksionin e zevendesimit per secilin rresht dhe kolone te matrices se mesazhit e keshtu krijohet matrica e cypher-it
+        //AES merr rreshtin r dhe kolonen c nga mesazhi dhe zbaton funksionin e zevendesimit per secilin rresht dhe kolone te matrices se mesazhit, e keshtu krijohet matrica e cypher-it
         private void SubBytes()
         {
             for (int r = 0; r < 4; ++r)
@@ -255,7 +255,7 @@ namespace DetyraAES
                 }
             }
         }  // InvSubBytes
-        //Funksioni Shift Rows - merr matricen e mesazhit dhe nuk e ndryshon rreshtin e pare te kesaj matrice. Per rreshtine e dytte zhvendos nje kuti 
+        //Funksioni Shift Rows - merr matricen e mesazhit dhe nuk e ndryshon rreshtin e pare te kesaj matrice. Per rreshtine e dyte zhvendos nje kuti 
         //zhvendoset p.sh nga pozita 10  ne 13. Ne rreshtin e trete zhvendosen  per dy dhe ne rreshtin e katert per tri. 
         private void ShiftRows()
         {
@@ -297,7 +297,7 @@ namespace DetyraAES
             }
         }  
         
-        //Funksioni Mix Column - Ne kete funksion eshte nje matrice fikse e cila d te ndikoje ne matricen e mesazhit(state). 
+        //Funksioni Mix Columns - Ne kete funksion eshte nje matrice fikse e cila do te ndikoje ne matricen e mesazhit(state). 
         //Rreshti i pare - nuk ndryshon
         //Rreshti i dyte - Shift to left
         //Rreshti i trete - Shift to left + XOR
@@ -331,7 +331,7 @@ namespace DetyraAES
                                            (int)gfmultby01(temp[2, c]) ^ (int)gfmultby02(temp[3, c]));
             }
         }  
-       //Funksioni invers per MixColumn
+       //Funksioni invers per MixColumns
         private void InvMixColumns()
         {
             byte[,] temp = new byte[4, 4];
@@ -343,7 +343,7 @@ namespace DetyraAES
                     temp[r, c] = this.State[r, c];
                 }
             }
-            //Funksionet per gjenerimin e vlerave perbrenda Galois Field
+            //Funksionet per gjenerimin e vlerave me kombinimet xor Galois Field
             for (int c = 0; c < 4; ++c)
             {
                 this.State[0, c] = (byte)((int)gfmultby0e(temp[0, c]) ^ (int)gfmultby0b(temp[1, c]) ^
@@ -406,15 +406,15 @@ namespace DetyraAES
       //Funksioni per zgjerimin e celesit baze ne key schedule 
         private void KeyExpansion()
         {
-            //casemi ne vargun dydimensional w qe e kemi deklaruar per key schedule, krijohet nje byte array me rendin ne vartesi nga block size (Nb) dhe number od rounds(Nr)
-            //Nb eshte gjithmone 4 per cfaredo madhesie celesi, Nr mund te kete vlerat (10, 12 ose 14) varesisht celesit 128, 192 ose 256 bits, nderkaq redni i kolonave eshte 4
+            //casemi ne vargun dydimensional w qe e kemi deklaruar per key schedule, krijohet nje byte array me rendin ne vartesi nga block size (Nb) dhe number of rounds(Nr)
+            //Nb eshte gjithmone 4 per cfaredo madhesie celesi, Nr mund te kete vlerat (10, 12 ose 14) varesisht celesit 128, 192 ose 256 bits. Nderkaq rendi i kolonave eshte 4
             //duke u perputhur me numrinne bajtave te nje fjale
             this.w = new byte[Nb * (Nr + 1), 4];  // 4 columns of bytes corresponds to a word
              
             //me nje for loop variabla row merr vlerat 0-3
             for (int row = 0; row < Nk; ++row)
             {
-                //vargut per key schedule i jepet vlere duke u casur ne vargunne celesit baze "key". Madhesia do te jete 4 * key size
+                //vargut per key schedule i jepet vlere duke u casur ne vargun e celesit baze "key". Madhesia do te jete 4 * key size
                 this.w[row, 0] = this.key[4 * row];
                 this.w[row, 1] = this.key[4 * row + 1];
                 this.w[row, 2] = this.key[4 * row + 2];
@@ -422,13 +422,13 @@ namespace DetyraAES
             }
             //krijohet nje byte array me vlera te perkohshme e rendit 4
             byte[] temp = new byte[4];
-            //vlera e row do te jete 4,6 ose 8 dhe vendoset ne nje for loop deri sa arrihet vlera 4*(Nr+1)
+            //vlera e row do te jete 4, 6 ose 8 dhe vendoset ne nje for loop deri sa arrihet vlera 4*(Nr+1)
             for (int row = Nk; row < Nb * (Nr + 1); ++row)
             {
                 //mbushet me te dhena temp array duke u bazuar ne array-n e key schedule
                 temp[0] = this.w[row - 1, 0]; temp[1] = this.w[row - 1, 1];
                 temp[2] = this.w[row - 1, 2]; temp[3] = this.w[row - 1, 3];
-                //nese numri i rreshtit modulo number of key eshte zero
+                
                 if (row % Nk == 0)
                 {
                     //vlera nga temp behet rotate dhe zevendesohet me funksionet e krijuara 
