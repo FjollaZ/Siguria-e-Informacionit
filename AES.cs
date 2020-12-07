@@ -331,7 +331,7 @@ namespace DetyraAES
                                            (int)gfmultby01(temp[2, c]) ^ (int)gfmultby02(temp[3, c]));
             }
         }  
-
+       //Funksioni invers per MixColumn
         private void InvMixColumns()
         {
             byte[,] temp = new byte[4, 4];
@@ -343,7 +343,7 @@ namespace DetyraAES
                     temp[r, c] = this.State[r, c];
                 }
             }
-
+            //Funksionet per gjenerimin e vlerave perbrenda Galois Field
             for (int c = 0; c < 4; ++c)
             {
                 this.State[0, c] = (byte)((int)gfmultby0e(temp[0, c]) ^ (int)gfmultby0b(temp[1, c]) ^
@@ -357,6 +357,8 @@ namespace DetyraAES
             }
         }  // InvMixColumns
 
+        
+         
         private static byte gfmultby01(byte b)
         {
             return b;
