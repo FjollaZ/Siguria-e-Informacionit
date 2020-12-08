@@ -11,9 +11,9 @@ namespace DetyraAES
         //Krijojme nje grupim  te konstanteve per madhesite e mundshme te celesit. Per 128, 193 dhe 256 bits.
         public enum KeySize { Bits128, Bits192, Bits256 };  
 
-        //Nb paraqet madhesine e bllokut per word 32 bitshe. Ne AES eshte 4 madhesia e bllokut(matrica e rendit 4X4) prandaj 4 * 32= 128 bits
+        //Nb paraqet madhesine e bllokut. Ne AES eshte 4 madhesia e bllokut(matrica e rendit 4X4) - 128 bits
         private int Nb;        
-        //Nk paraqet madhesine e celesit per word 32 bitshe. 4, 6, 8 jane vlerat e mundshme. (128, 192 dhe 256 bits)
+        //Nk paraqet madhesine e celesit. 4, 6, 8 jane vlerat e mundshme. (128, 192 dhe 256 bits)
         private int Nk;         
        // Numri i cikleve (number of rounds).
        //10 cikle -> per celes 128 bitsh
@@ -126,26 +126,26 @@ namespace DetyraAES
         //funksioni per vendosjen e vlerave te blok size-it, key size-it dhe numrit te roundeve varesisht prej madhesise se celesit(128, 192 apo 256)
         private void SetNbNkNr(KeySize keySize)
         {
-            //Block size eshte gjithmone 4. 4 words = 16 bytes = 128 bits per AES
-            this.Nb = 4;     // block size always = 4 words = 16 bytes = 128 bits for AES
+            //Block size eshte gjithmone 4. 16 bytes = 128 bits per AES
+            this.Nb = 4;     
 
             //vendosim kushtet varesisht nga madhesia e celesit (ne bits - KeySize) vendoset nje vlere per key size Nk dhe per numrin e cikleve te perseritjes Nr
             if (keySize == KeySize.Bits128)
             {
-                //nese madhesia e celesit eshte 128 bits atehere key size Nk = 4, sepse 4 words = 16 bytes = 128 bits, nderkaq numri i cikleve 10
-                this.Nk = 4;   // key size = 4 words = 16 bytes = 128 bits
+                //nese madhesia e celesit eshte 128 bits atehere key size Nk = 4, sepse  16 bytes = 128 bits, nderkaq numri i cikleve 10
+                this.Nk = 4;   
                 this.Nr = 10;  // rounds for algorithm = 10
             }
-            //nese madhesia e celesit eshte 192 bits atehere key size Nk = 6, sepse 6 words *4 = 24 bytes *8= 128 bits, nderkaq numri i cikleve 12
+            //nese madhesia e celesit eshte 192 bits atehere key size Nk = 6, sepse 6 *4 = 24 bytes *8= 128 bits, nderkaq numri i cikleve 12
             else if (keySize == KeySize.Bits192)
             {
-                this.Nk = 6;   // 6 words = 24 bytes = 192 bits
+                this.Nk = 6;  
                 this.Nr = 12;
             }
-            //nese madhesia e celesit eshte 256 bits atehere key size Nk = 8, sepse 8 words = 32 bytes = 256 bits, nderkaq numri i cikleve 14
+            //nese madhesia e celesit eshte 256 bits atehere key size Nk = 8, sepse 8*4 = 32 bytes = 256 bits, nderkaq numri i cikleve 14
             else if (keySize == KeySize.Bits256)
             {
-                this.Nk = 8;   // 8 words = 32 bytes = 256 bits
+                this.Nk = 8;   
                 this.Nr = 14;
             }
         }  // SetNbNkNr()
@@ -217,7 +217,7 @@ namespace DetyraAES
                                    {0x1b, 0x00, 0x00, 0x00},
                                    {0x36, 0x00, 0x00, 0x00} };
         }  
-      //Funksioni AddRound key - perzien nje vlere nga matrica e celesite me nje vlere nga matrica e mesazhit me funksionin xor. 
+      //Funksioni AddRound key - perzien nje vlere nga matrica e celesite me nje vlere nga matrica e mesazhit(plaintext) me funksionin xor. 
         // r -rreshti, c - kolona
         //funskioni xor zbatohet ne mes te mesazhit dhe celesit per te krijuar cyphertext
         private void AddRoundKey(int round)
