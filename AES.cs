@@ -477,37 +477,7 @@ namespace DetyraAES
             return result;
         }
 
-        public void Dump()
-        {
-            Console.WriteLine("Nb = " + Nb + " Nk = " + Nk + " Nr = " + Nr);
-            Console.WriteLine("\nThe key is \n" + DumpKey());
-            Console.WriteLine("\nThe Sbox is \n" + DumpTwoByTwo(Sbox));
-            Console.WriteLine("\nThe w array is \n" + DumpTwoByTwo(w));
-            Console.WriteLine("\nThe State array is \n" + DumpTwoByTwo(State));
-        }
 
-        public string DumpKey()
-        {
-            string s = "";
-            for (int i = 0; i < key.Length; ++i)
-                s += key[i].ToString("x2") + " ";
-            return s;
-        }
-
-        public string DumpTwoByTwo(byte[,] a)
-        {
-            string s = "";
-            for (int r = 0; r < a.GetLength(0); ++r)
-            {
-                s += "[" + r + "]" + " ";
-                for (int c = 0; c < a.GetLength(1); ++c)
-                {
-                    s += a[r, c].ToString("x2") + " ";
-                }
-                s += "\n";
-            }
-            return s;
-        }
 
     }
 }
